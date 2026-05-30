@@ -4,7 +4,9 @@
 @Metadata.ignorePropagatedAnnotations: true
 define view entity ZI_BOOKING_145LG
   as select from zbooking_145lg
+
   association        to parent ZI_TRAVEL_145LG   as _Travel        on  $projection.TravelUUID = _Travel.TravelUUID
+  composition [0..*] of ZI_BSUPPL_145LG as _BookingSupplement   
   association [1..1] to /DMO/I_Customer          as _Customer      on  $projection.CustomerID = _Customer.CustomerID //Customer Help a futuro
   association [1..1] to /DMO/I_Carrier           as _Carrier       on  $projection.AirlineID = _Carrier.AirlineID //Customer Help a futuro
   association [1..1] to /DMO/I_Connection        as _Connection    on  $projection.AirlineID    = _Connection.AirlineID
@@ -32,6 +34,7 @@ define view entity ZI_BOOKING_145LG
       _Connection,
       _BookingStatus,
       _Currency,
-      _Travel
+      _Travel,
+      _BookingSupplement
 
 }
