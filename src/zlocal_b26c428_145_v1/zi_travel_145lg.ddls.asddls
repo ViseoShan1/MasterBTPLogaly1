@@ -2,7 +2,12 @@
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Travel Interfaces Entity'
 @Metadata.ignorePropagatedAnnotations: true
-define view entity Zi_TRAVEL_145LG as select from ztravel_145lg
+define root view entity ZI_TRAVEL_145LG as select from ztravel_145lg
+  composition [0..*] of ZI_BOOKING_145LG as _Booking
+  association [0..1] to /DMO/I_Agency as _Agency on $projection.AgencyID = _Agency.AgencyID
+  association [0..1] to /DMO/I_Customer as _Customer on $projection.CustomerID = _Customer.CustomerID
+  association [0..1] to I_Currency as _Currency                 on $projection.CurrencyCode = _Currency.Currency
+  association [0..1] to /DMO/I_Overall_Status_VH as _OverallStatus on $projection.OverallStatus = _OverallStatus.OverallStatus
 {
   key travel_uuid           as TravelUUID,
       travel_id             as TravelID,
@@ -26,5 +31,11 @@ define view entity Zi_TRAVEL_145LG as select from ztravel_145lg
       @Semantics.systemDateTime.localInstanceLastChangedAt: true
       local_last_changed_at as LocalLastChangedAt,
       @Semantics.systemDateTime.lastChangedAt: true
-      last_changed_at       as LastChangedAt
+      last_changed_at       as LastChangedAt,
+      /***/
+      _Booking,
+      _Agency,
+      _Currency,
+      _OverallStatus,
+      _Customer
 }
