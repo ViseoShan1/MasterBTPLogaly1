@@ -3,7 +3,7 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <DDLS>
-    <DDLNAME>ZI_LIBROS145</DDLNAME>
+    <DDLNAME>ZC_CLIENTES145</DDLNAME>
     <DDLANGUAGE>E</DDLANGUAGE>
     <DDTEXT>Libros Interfase Entity</DDTEXT>
     <SOURCE_TYPE>W</SOURCE_TYPE>

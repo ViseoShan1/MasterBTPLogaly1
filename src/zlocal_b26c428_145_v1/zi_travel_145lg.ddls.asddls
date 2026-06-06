@@ -12,7 +12,9 @@ define root view entity ZI_TRAVEL_145LG as select from ztravel_145lg
   key travel_uuid           as TravelUUID,
       travel_id             as TravelID,
       agency_id             as AgencyID,
+      _Agency.Name          as AgencyName,
       customer_id           as CustomerID,
+      concat_with_space(_Customer.FirstName, _Customer.LastName, 1)   as CustomerName,
       begin_date            as BeginDate,
       end_date              as EndDate,
       currency_code         as CurrencyCode,
@@ -22,6 +24,12 @@ define root view entity ZI_TRAVEL_145LG as select from ztravel_145lg
       total_price           as TotalPrice,
       description           as Description,
       overall_status        as OverallStatus,
+      case overall_status
+        when 'O' then 5 //Information => Azul
+        when 'A' then 3 //Positive => Verde
+        when 'X' then 1 //Negative => Rojo
+        else 0          //Neutral => gris
+      end                   as OverallStatusCriticality,
       @Semantics.user.createdBy: true
       local_created_by      as LocalCreatedBy,
       @Semantics.systemDateTime.createdAt: true
@@ -32,10 +40,10 @@ define root view entity ZI_TRAVEL_145LG as select from ztravel_145lg
       local_last_changed_at as LocalLastChangedAt,
       @Semantics.systemDateTime.lastChangedAt: true
       last_changed_at       as LastChangedAt,
-      /***/
+      /** Associations */
       _Booking,
       _Agency,
+      _Customer,
       _Currency,
-      _OverallStatus,
-      _Customer
+      _OverallStatus
 }

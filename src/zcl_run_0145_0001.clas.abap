@@ -207,8 +207,8 @@ METHOD if_oo_adt_classrun~main.
         out->write( |Libros: { sy-dbcnt } registros insertados| ).
     endif.
 
-
-    "Check result in console
+*
+*    "Check result in console
     out->write( 'DONE!' ).
 ENDMETHOD.
 ENDCLASS.
