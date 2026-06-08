@@ -1,0 +1,137 @@
+@Metadata.layer: #CORE
+@UI: {
+    headerInfo: {
+        typeName: 'Book',
+        typeNamePlural: 'Books',
+        title:{ type: #STANDARD,value:'IdLibro' },
+        description: { type: #STANDARD,value:'Titulo' }
+    },
+    presentationVariant: [{
+        sortOrder: [{ by: 'IdLibro', direction: #DESC  },
+        { by: 'Autor', direction: #ASC  }],
+        visualizations: [{ type: #AS_LINEITEM }]
+    }]
+}
+annotate entity ZC_MAIN_145 with
+{
+@UI.facet: [
+    {
+      id:              'GeneralInfoFacet',
+      purpose:         #STANDARD,
+      type:            #FIELDGROUP_REFERENCE,
+      label:           'Información General',
+      targetQualifier: 'IDGR01',
+      position:        5
+    },{    parentId:        'GeneralInfoFacet' }
+    
+  ]
+  @EndUserText.label: 'ID Libro'
+  @UI: {
+  
+    lineItem: [{ position: 10 }]
+  }
+  IdLibro;
+  @EndUserText.label: 'Bi Categoria'
+  @UI: {
+--  facet: [{ label:'Informacion Libro',
+--             id:'General Info',
+--             purpose: #STANDARD  ,
+--             position: 10,
+-- type: #IDENTIFICATION_REFERENCE 
+--         }],
+   fieldGroup: [{ qualifier: 'IDGR01', position: 20,label:'Bi Categoria ' }],
+   lineItem: [{ position: 20 }],
+         selectionField: [{ position: 30 }],
+        textArrangement: #TEXT_ONLY
+  }
+  @Consumption.valueHelpDefinition: [{ entity.name: 'ZI_ACCCATEG_145' , entity.element: 'BiCateg' }]  
+  BiCateg;
+  @EndUserText.label: 'ID Titulo'
+  @UI: {
+  fieldGroup: [{ qualifier: 'IDGR01', position: 30,label:'Titulo' }],
+   lineItem: [{ position: 30 ,label:'Titulo' }]
+  }
+  Titulo;
+  @EndUserText.label: 'Autor'
+  @UI: {
+  fieldGroup: [{ qualifier: 'IDGR01', position: 40,label:'Autor' }],
+    lineItem: [{ position: 40 ,label:'Autor' }]
+    ,
+        selectionField: [{ position: 10 }],
+        textArrangement: #TEXT_ONLY
+  }
+  Autor;
+  @EndUserText.label: 'Editorial'
+  @UI: {
+    fieldGroup: [{ qualifier: 'IDGR01',position: 50,label:'Editorial' }],
+    lineItem: [{ position: 50 }],
+        selectionField: [{ position: 20 }],
+        textArrangement: #TEXT_ONLY
+  }
+  Editorial;
+@UI.facet: [
+    {
+      id:              'GeneralInfoFacet2',
+      purpose:         #STANDARD,
+      type:            #FIELDGROUP_REFERENCE,
+      label:           'Información General 2',
+      targetQualifier: 'IDGR02',
+      position:        55
+      
+    },{    parentId:        'GeneralInfoFacet2' }
+    
+  ]  
+  @EndUserText.label: 'Idioma'
+  @UI: {
+    fieldGroup: [{ qualifier: 'IDGR02',position: 60,label:'Idioma' }],
+        lineItem: [{ position: 60 }]
+    }
+  Idioma;
+  @EndUserText.label: 'Páginas'
+  @UI: {
+    fieldGroup: [{ qualifier: 'IDGR02', position: 70,label:'Páginas' }],
+        lineItem: [{ position: 70 }]
+    }
+  Paginas;
+  @EndUserText.label: 'Precio'
+  @UI: {
+      fieldGroup: [{ qualifier: 'IDGR02', position: 80,label:'Precio' }],
+        lineItem: [{ position: 80 }]
+    }
+  Precio;
+  @EndUserText.label: 'Moneda'
+  @UI: {
+  fieldGroup: [{ qualifier: 'IDGR02', position: 90,label:'Moneda' }],
+        lineItem: [{ position: 90 }]
+    }
+  Moneda;
+  @EndUserText.label: 'Formato'
+  @UI: {
+  fieldGroup: [{ qualifier: 'IDGR02', position: 100,label:'Formato' }],
+        lineItem: [{ position: 100 }]
+    }
+  Formato;
+  @EndUserText.label: 'Url'
+  @UI: {
+  fieldGroup: [{ qualifier: 'IDGR02', position: 110,label:'Url' }],
+        lineItem: [{ position: 110 }]
+    }
+  Url;
+  @EndUserText.label: 'Total Clients'
+
+  @UI: { fieldGroup: [{ qualifier: 'IDGR02', position: 120,label:'Total Clientes' }],
+        lineItem: [{ position: 120 ,
+    
+                  cssDefault.width: '10rem',
+                  criticality: 'TotalCritiallity'
+      }]
+  }
+  Total;
+  @EndUserText.label: 'TotalCriticatility'
+  @UI: {
+        lineItem: [{ position: 130 }]
+    }
+  TotalCritiallity;
+
+
+}
