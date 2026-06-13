@@ -6,7 +6,7 @@ define view entity ZI_BOOKING_145LG
   as select from zbooking_145lg
 
   association        to parent ZI_TRAVEL_145LG   as _Travel        on  $projection.TravelUUID = _Travel.TravelUUID
-  composition [0..*] of ZI_BSUPPL_145LG as _BookingSupplement   
+  composition [0..*] of ZI_BSUPPL_145LG          as _BookingSupplement
   association [1..1] to /DMO/I_Customer          as _Customer      on  $projection.CustomerID = _Customer.CustomerID //Customer Help a futuro
   association [1..1] to /DMO/I_Carrier           as _Carrier       on  $projection.AirlineID = _Carrier.AirlineID //Customer Help a futuro
   association [1..1] to /DMO/I_Connection        as _Connection    on  $projection.AirlineID    = _Connection.AirlineID
@@ -14,20 +14,23 @@ define view entity ZI_BOOKING_145LG
   association [1..1] to /DMO/I_Booking_Status_VH as _BookingStatus on  $projection.BookingStatus = _BookingStatus.BookingStatus //Customer Help a futuro
   association [1..1] to I_Currency               as _Currency      on  $projection.CurrencyCode = _Currency.Currency //Customer Help a futuro
 {
-  key booking_uuid          as BookingUUID,
-      parent_uuid           as TravelUUID,
-      booking_id            as BookingID,
-      booking_date          as BookingDate,
-      customer_id           as CustomerID,
-      carrier_id            as AirlineID,
-      connection_id         as ConnectionID,
-      flight_date           as FlightDate,
-      currency_code         as CurrencyCode,
+  key booking_uuid                                                                       as BookingUUID,
+      parent_uuid                                                                        as TravelUUID,
+      booking_id                                                                         as BookingID,
+      booking_date                                                                       as BookingDate,
+      customer_id                                                                        as CustomerID,
+      concat_with_space(_Customer.FirstName, _Customer.LastName, 1)                      as CustomerName,
+      carrier_id                                                                         as AirlineID,
+      _Carrier.Name                                                                      as AirlineName,
+      connection_id                                                                      as ConnectionID,
+      concat_with_space(_Connection.DepartureAirport, _Connection.DestinationAirport, 1) as ConnectionRoute,
+      flight_date                                                                        as FlightDate,
+      currency_code                                                                      as CurrencyCode,
       @Semantics.amount.currencyCode: 'CurrencyCode'
-      flight_price          as FlightPrice,
-      booking_status        as BookingStatus,
+      flight_price                                                                       as FlightPrice,
+      booking_status                                                                     as BookingStatus,
       @Semantics.systemDateTime.localInstanceLastChangedAt: true
-      local_last_changed_at as LocalLastChangedAt,
+      local_last_changed_at                                                              as LocalLastChangedAt,
       /** Asociaciones */
       _Customer,
       _Carrier,

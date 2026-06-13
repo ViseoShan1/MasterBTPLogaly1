@@ -6,6 +6,7 @@ define root view entity ZC_TRAVEL_145LG
     provider contract transactional_query
 as projection on ZI_TRAVEL_145LG
 {
+ 
     key TravelUUID,
     TravelID,
     @ObjectModel.text.element: [ 'AgencyName' ]
@@ -22,7 +23,6 @@ as projection on ZI_TRAVEL_145LG
     CustomerName,
     BeginDate,
     EndDate,
-     
     @Consumption.valueHelpDefinition: [{ 
         entity: { name: 'I_Currency', element: 'Currency' }
      }]  
@@ -36,7 +36,7 @@ as projection on ZI_TRAVEL_145LG
     @Consumption.valueHelpDefinition: [{ 
         entity: { name: '/DMO/I_Overall_Status_VH', element: 'OverallStatus' }
      }]      
-    OverallStatus,
+    OverallStatus,//<-- O A X
     _OverallStatus._Text.Text as OverallStatusText : localized,
     OverallStatusCriticality,
     @Semantics.systemDateTime.localInstanceLastChangedAt: true
