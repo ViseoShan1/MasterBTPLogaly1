@@ -15,6 +15,15 @@
 annotate entity ZC_MAIN_145 with
 {
 @UI.facet: [
+{
+ id: 'Clientes-Libros' ,
+ purpose: #STANDARD,
+ type:#LINEITEM_REFERENCE,
+ label:'Bookings',
+ position : 140,
+  targetElement: '_clnlib'
+},
+
     {
       id:              'GeneralInfoFacet',
       purpose:         #STANDARD,
@@ -132,6 +141,9 @@ annotate entity ZC_MAIN_145 with
         lineItem: [{ position: 130 }]
     }
   TotalCritiallity;
-
+    @UI: {
+        lineItem: [{ position: 140 }]
+    }
+_clnlib;
 
 }

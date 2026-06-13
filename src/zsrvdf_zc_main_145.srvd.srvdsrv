@@ -2,4 +2,5 @@
 define service ZSRVDF_ZC_MAIN_145 {
   expose ZC_MAIN_145;
   expose ZI_ACCCATEG_145;
+  expose ZI_CLIENTES_LIBROS;
 }

@@ -22,6 +22,10 @@ as projection on ZI_TRAVEL_145LG
     CustomerName,
     BeginDate,
     EndDate,
+     
+    @Consumption.valueHelpDefinition: [{ 
+        entity: { name: 'I_Currency', element: 'Currency' }
+     }]  
     CurrencyCode,
     @Semantics.amount.currencyCode: 'CurrencyCode'
     BookingFee,
@@ -29,6 +33,9 @@ as projection on ZI_TRAVEL_145LG
     TotalPrice,
     Description,
     @ObjectModel.text.element: [ 'OverallStatusText' ]
+    @Consumption.valueHelpDefinition: [{ 
+        entity: { name: '/DMO/I_Overall_Status_VH', element: 'OverallStatus' }
+     }]      
     OverallStatus,
     _OverallStatus._Text.Text as OverallStatusText : localized,
     OverallStatusCriticality,
