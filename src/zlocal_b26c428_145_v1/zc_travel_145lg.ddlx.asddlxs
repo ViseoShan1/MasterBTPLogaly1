@@ -133,7 +133,11 @@ annotate entity ZC_TRAVEL_145LG with
         fieldGroup: [{ position: 20, qualifier: 'Pricing' }]
   }
   TotalPrice;
-  @EndUserText.label: 'Description'
+    @EndUserText.label: 'Description'
+    @UI: { 
+        identification: [{ position: 20  }]
+    }
+ 
   Description;
   @EndUserText.label: 'Overall Status'
   @UI: {
