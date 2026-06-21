@@ -6,6 +6,27 @@ CLASS lhc_Travel DEFINITION INHERITING FROM cl_abap_behavior_handler.
 
     METHODS get_global_authorizations FOR GLOBAL AUTHORIZATION
       IMPORTING REQUEST requested_authorizations FOR Travel RESULT result.
+    METHODS setTravelNumber FOR DETERMINE ON SAVE
+      IMPORTING keys FOR Travel~setTravelNumber.
+    METHODS setInitialValue FOR DETERMINE ON MODIFY
+      IMPORTING keys FOR Travel~setInitialValue.
+    METHODS acceptTravel FOR MODIFY
+      IMPORTING keys FOR ACTION Travel~acceptTravel RESULT result.
+
+    METHODS rejectTravel FOR MODIFY
+      IMPORTING keys FOR ACTION Travel~rejectTravel RESULT result.
+CONSTANTS:
+    BEGIN OF travel_status,
+     open type c LENGTH 1 VALUE 'O',
+     accepted type c LENGTH 1 VALUE 'A',
+     rejected type c LENGTH 1 VALUE 'X',
+    end of travel_status,
+        BEGIN OF travel_criticality,
+        neutral TYPE i VALUE 0,
+        negative TYPE i VALUE 1,
+        positive TYPE i VALUE 3,
+        information TYPE i VALUE 5,
+       END OF TRAVEL_criticality.
 
 ENDCLASS.
 
@@ -17,4 +38,105 @@ CLASS lhc_Travel IMPLEMENTATION.
   METHOD get_global_authorizations.
   ENDMETHOD.
 
+  METHOD setTravelNumber.
+     READ ENTITIES OF ZI_TRAVEL_145LG IN LOCAL MODE
+        ENTITY Travel
+        FIELDS ( TravelID )
+        WITH CORRESPONDING #( keys )
+        RESULT DATA(travels).
+
+   DELETE travels WHERE TravelID IS NOT INITIAL.
+   CHECK travels IS NOT INITIAL.
+
+   SELECT SINGLE FROM ztravel_145lg FIELDS MAX( travel_id ) INTO @DATA(max_travelid).
+
+   MODIFY ENTITIES OF ZI_TRAVEL_145LG IN LOCAL MODE
+    ENTITY Travel
+    UPDATE FIELDS ( TravelID )
+    WITH VALUE #(
+        FOR travel IN travels INDEX INTO i (
+            %tky = travel-%tky
+            TravelID = max_travelid + i
+        )
+    ).
+  ENDMETHOD.
+
+  METHOD setInitialValue.
+
+  READ ENTITIES OF ZI_TRAVEL_145LG IN LOCAL MODE
+        ENTITY Travel
+        FIELDS ( OverallStatus OverallStatusCriticality CurrencyCode )
+        WITH CORRESPONDING #( keys )
+        RESULT DATA(travels).
+
+   DELETE travels WHERE OverallStatus IS NOT INITIAL AND CurrencyCode is NOT INITIAL.
+    CHECK travels IS NOT INITIAL.
+
+       MODIFY ENTITIES OF ZI_TRAVEL_145LG IN LOCAL MODE
+    ENTITY Travel
+    UPDATE FIELDS ( OverallStatus OverallStatusCriticality CurrencyCode )
+    WITH VALUE #(
+        FOR travel IN travels INDEX INTO i (
+            %tky = travel-%tky
+            OverallStatus = cond #(
+             WHEN Travel-OverallStatus is INITIAL
+             then travel_status-open
+             else Travel-OverallStatus )
+                  OverallStatusCriticality = cond #(
+             WHEN Travel-OverallStatusCriticality is INITIAL
+             then travel_criticality-information
+             else Travel-OverallStatusCriticality )
+                               CurrencyCode = cond #(
+             WHEN Travel-CurrencyCode is INITIAL
+             then 'EUR'
+             else Travel-CurrencyCode )
+        )
+    ).
+
+  ENDMETHOD.
+  METHOD acceptTravel.
+
+    MODIFY ENTITIES OF ZI_TRAVEL_145LG IN LOCAL MODE
+        ENTITY Travel
+        UPDATE FIELDS ( OverallStatus OverallStatusCriticality )
+        WITH VALUE #( FOR key IN keys (
+            %tky = key-%tky
+            OverallStatus = travel_status-accepted
+            OverallStatusCriticality = travel_criticality-positive
+        ) ).
+
+    READ ENTITIES OF ZI_TRAVEL_145LG IN LOCAL MODE
+        ENTITY Travel
+        ALL FIELDS WITH CORRESPONDING #( keys )
+        RESULT DATA(travels).
+
+   result = VALUE #( FOR travel IN travels (
+        %tky = travel-%tky
+        %param = travel
+   ) ).
+
+  ENDMETHOD.
+
+  METHOD rejectTravel.
+
+    MODIFY ENTITIES OF ZI_TRAVEL_145LG IN LOCAL MODE
+        ENTITY Travel
+        UPDATE FIELDS ( OverallStatus OverallStatusCriticality )
+        WITH VALUE #( FOR key IN keys (
+            %tky = key-%tky
+            OverallStatus = travel_status-rejected
+            OverallStatusCriticality = travel_criticality-negative
+        ) ).
+
+    READ ENTITIES OF ZI_TRAVEL_145LG IN LOCAL MODE
+        ENTITY Travel
+        ALL FIELDS WITH CORRESPONDING #( keys )
+        RESULT DATA(travels).
+
+   result = VALUE #( FOR travel IN travels (
+        %tky = travel-%tky
+        %param = travel
+   ) ).
+
+  ENDMETHOD.
 ENDCLASS.
